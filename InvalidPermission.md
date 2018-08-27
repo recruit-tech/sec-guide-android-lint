@@ -26,6 +26,7 @@
     <application
             android:icon="@drawable/ic_launcher"
             android:label="@string/app_name">
+        <!-- activityへのpermission属性指定は有効 -->
         <activity
                 android:label="@string/app_name"
                 android:name="com.example.service.serviceClass"
@@ -68,7 +69,7 @@
 
 Lintは、permission属性が無効なタグに対する設定を検知すると、次のようなメッセージを出力します。
 
-- Lint結果(warning)  
+- Lint出力(warning)  
   "Protecting an unsupported element with a permission is a non-op and potentially dangerous."
 
 注意: permissionタグに対する設定は無効ですが、Lintはこれを検知しません。逆に、path-permissionタグは設定が有効ですが、Lintはメッセージを出力します。

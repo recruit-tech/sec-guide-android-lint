@@ -19,20 +19,20 @@ Android Studioを利用する場合の手順については[「プロジェク�
 
 ## 不適切な例
 
-共有ライブラリのlib以外の格納場所として、assetsやresディレクトリ、もしくはソース中にバイナリイメージを埋め込む方法が考えられます。
-このような共有ライブラリは使用するには、**自前で**APKファイルから.soファイルを取り出して、端末に配置する必要があります。
-このとき、ファイルの配置、アクセス権限の設定を誤ると第三者アプリから読み書き可能になり、悪意のあるコードの埋め込みおよび実行につながるリスクがあります。
+共有ライブラリをlib以外のassetsやresディレクトリに格納、もしくはソース中にバイナリイメージを埋め込むことができます。
+このような共有ライブラリを使用するには、**自前で**APKファイルから.soファイルを取り出して、端末に配置する必要があります。
+このとき、ファイルの配置やアクセス権限の設定を誤ると第三者アプリから読み書き可能になり、悪意のあるコードの埋め込みおよび実行のリスクとなります。
 
-Lintはresあるいはassetsディレクトリの下に共有ライブラリが配置されている場合、そのファイルの拡張子に応じて次のようなメッセージを出力します。
+Lintは、resあるいはassetsディレクトリの下に共有ライブラリが配置されていることを検知すると、そのファイルの拡張子に応じて次のようなメッセージを出力します。
 
-- Lint結果  
-  ファイルの拡張子が“.so”のとき  
+- Lint出力  
+  ＜ファイルの拡張子が“.so”のとき ＞ 
   “Shared libraries should not be placed in the res or assets directories. Please use the features of your development environment to place shared libraries in the lib directory of the compiled APK.”
   
-  ファイルの拡張子が“.so”以外のとき  
+  ＜ファイルの拡張子が“.so”以外のとき＞  
   “Embedding non-shared library native executables into applications should be avoided when possible, as there is an increased risk that the executables could be tampered with after installation. Instead, native code should be placed in a shared library, and the features of the development environment should be used to place the shared library in the lib directory of the compiled APK.”  
 
-Lintはソースコードに埋め込まれたライブラリのバイナリイメージを検知することはできません。
+Lintは、ソースコードに埋め込まれたライブラリのバイナリイメージを検知することはできません。
 
 ## 外部リンク
 

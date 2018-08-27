@@ -2,7 +2,7 @@
 
 ## 警告されている問題点
 
-BroadcastReceiverの保護が不十分なため、意図しないSMS Broadcast[^注釈1]を受信し、フィッシングサイトへのアクセスや重要情報の漏洩のリスクがあります。
+BroadcastReceiverの保護が不十分なため、意図しないSMS Broadcast[^注釈1]を受信し、フィッシングサイトへの誘導や重要情報の漏洩のリスクがあります。
 
 ## 対策のポイント
 
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity  {
 
 ## 不適切な例
 
-第三者アプリが送信するSMS Broadcastを無条件に受信し処理してしまうと、攻撃者が細工した​データが含まれている可能性があるため、リスクがあります。
+第三者アプリが送信するSMS Broadcastを無条件に受信し処理してしまうと、攻撃者が細工した​データが含まれている可能性があり危険です。
 
 （静的BroadcastReceiverの例）
 
@@ -83,12 +83,12 @@ public class MainActivity extends AppCompatActivity  {
     }
 ```
 
-Lintは、前者の静的ReceiverのようにSMS Broadcast[^注釈1]を受信する設定とし、かつ、BROADCAST\_SMS パーミッションの未指定を検知すると、次のようなメッセージを出力します。
+Lintは、前者の静的ReceiverのようにSMS Broadcast[^注釈1]を受信する設定とし、かつ、BROADCAST\_SMS パーミッションの指定がないことを検知すると、次のようなメッセージを出力します。
 
-  - Lint結果(Warning)  
+- Lint出力(Warning)  
     "BroadcastReceivers that declare an intent-filter for SMS_DELIVER or SMS_RECEIVED must ensure that the caller has the BROADCAST_SMS permission, otherwise it is possible for malicious actors to spoof intents."
 
-Lintは、動的Receiverの例を検知できません。
+Lintは、後者の動的Receiverの例を検知できません。
 
 ## 外部リンク
 

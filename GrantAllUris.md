@@ -8,15 +8,13 @@ ContentProviderの全リソース利用が他のアプリに許可されてい�
 
 - アクセスを許可するリソースを必要最小限にする
 
-より適切なアクセス制御を行うには、[Content provider does not require permission][4]の項も参照してください。
-
 ## 対策の具体例
 
 下の例は、リソースの一時的なアクセスを"/for_sharing/this_directory_only/"以下に限定するための設定です。
 
 ```
 <!-- exported属性をfalseにすることで、基本的に外部からの利用不可 -->
-<!-- grantUriPermissions属性をfalseにすることで、一時許可するパスをマニフェストでの指定に限定 -->
+<!-- grantUriPermissions属性をfalseにし、パスを限定して一時的アクセスを許可 -->
 <provider
     android:exported="false"
     android:grantUriPermissions="false"
@@ -27,12 +25,15 @@ ContentProviderの全リソース利用が他のアプリに許可されてい�
 </provider>
 ```
 
-pathPrefix属性の他にpath属性、pathPattern属性も使用できます。併用も可能です。
-詳しくは[&lt;grant-uri-permission&gt; | Android Developers][0]を参照してください。
+pathPrefix属性の他にpath属性、pathPattern属性を使用できます。併用も可能です。
+詳しくは[Android Developers][0]を参照してください。
+
+より詳細なアクセス制御を行うには、[Content provider does not require permission][4]の項も参照してください。
 
 ## 不適切な例
 
-以下は、パス指定の3種の方法path属性、pathPrefix属性、およびpathPttern属性によってアクセス可能なリソースのパスを指定していますが、どれもすべてのリソースに対するアクセスを許可する設定になっていて、情報漏洩・改竄のリスクがあります。
+アクセス可能なリソースのパスの指定には、path属性、pathPrefix属性、およびpathPttern属性の3種類があります。
+以下は、それぞれアクセス可能なリソースのパスを指定していますが、どれもすべてのリソースに対するアクセスを許可する設定になっているため、情報漏洩・改竄のリスクがあります。
 
 ```
 <provider
@@ -47,7 +48,7 @@ pathPrefix属性の他にpath属性、pathPattern属性も使用できます。�
 ```
 Lintは、grant-uri-permission属性のパス指定が “/” となっているものを検知すると、次のようなメッセージを出力します。
 
-- Lint結果(Warning)  
+- Lint出力(Warning)  
   "Content provider shares everything; this is potentially dangerous."
 
 このメッセージはexported属性をfalse（非公開）に設定していても出力されます。

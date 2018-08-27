@@ -14,7 +14,7 @@
 
 ## 不適切な例
 
-以下の例では他のアプリから書き込み可能なモードでファイルを作成/オープンしているため、情報の安全性を保持することができません。
+以下の例では他のアプリから書き込み可能なモードでファイルを作成/オープンしているため、情報の確実性を保証することができません。
 
 ```java
     try {
@@ -34,7 +34,7 @@
 ```
 
 
-LintはopenFileOutput()、getSharedPreferences()およびgetDir()がWORLD_WRITEABLEを第2引数として呼び出されているのを検知すると、次のようなメッセージを出力します
+Lintは、上の例のようにopenFileOutput()、getSharedPreferences()およびgetDir()がWORLD_WRITEABLEを第2引数として呼び出されていることを検知すると、次のようなメッセージを出力します。
 
 -   Lint出力(Warning)  
     "Using 'MODE_WORLD_WRITEABLE’ when creating files can be risky, review carefully."

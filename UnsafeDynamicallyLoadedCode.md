@@ -48,8 +48,6 @@ public class MainActivity extends AppCompatActivity  {
 
 ## 不適切な例
 
-### Runtime.load()もしくはSystem.load()によりロードする
-
 Runtime.load()もしくはSystem.load()は任意のパスのライブラリをロードすることができますが、第三者アプリによる書き換えのリスクが高くなります。
 
 ```java
@@ -84,7 +82,7 @@ public class MainActivity extends Activity {
 }
 ```
 
-Lintはload()の使用を検知すると、次のようなメッセージを出力します。
+Lintは、load()の使用を検知すると、次のようなメッセージを出力します。
 
 - Lint出力(Warning)  
   "Dynamically loading code using \`load\` is risky, please use \`loadLibrary\` instead when possible."

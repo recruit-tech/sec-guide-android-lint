@@ -65,11 +65,11 @@ checkPermission系のメソッドは、指定するパーミッションの検�
     setResult(RESULT_OK);
 ```
 
-__enforce__CallingPermissionメソッドの間違いで__check__CallingPermissionメソッドを使用すると、このようなことになります。
+例外を投げる__enforce__CallingPermissionメソッドと誤って付与状態を返す__check__CallingPermissionメソッドを使用すると、このようなことになります。
 
 Lintは、checkCallingPermissionメソッドなどの戻り値が使用されていないことを検知すると、次のようなメッセージを出力します。
 
-  - Lint 結果(Warning)  
+  - Lint出力(Warning)  
     "The result of checkCallingPermission is not used; did you mean to call enforceCallingPermission."
 
 ## 外部リンク

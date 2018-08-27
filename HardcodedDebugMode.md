@@ -10,14 +10,14 @@
 
 ## 対策の具体例
 
-現在のAndroid Studioでは、エミュレータやデバイス上でのデバッグ用APKファイルのビルド時に自動で`android:debuggable="true"`が挿入されます。  
-そのため、AndroidManifest.xmlの&lt;application&gt;タグにandroid:debuggable属性を設定しないようにしましょう。
+以前のAndroid Studioでは、debuggable属性を切り替えてデバッグモードを変更していましたが、現在は明示されていなければ、ビルドタイプに応じて自動で適用されます。  
+そのため、Android Studio利用時にはマニフェストのapplicationタグにdebuggable属性を設定しない方が利便性が高くなります。
 
 ```
     <manifest xmlns:android="http://schemas.android.com/apk/res/android"
               package="com.example.sample">
 
-    <!-- ツールが変更できるようにandroid:debuggable属性を記載しない -->
+    <!-- ツールが変更できるようにdebuggable属性を記載しない -->
         <application
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
@@ -31,7 +31,7 @@
 
 ## 不適切な例
 
-AndroidManifest.xmlにandroid:debuggable属性が記述されていると、ビルドの種類にかかわらず常にその値を使用します。リリース時、この設定の変更を忘れると、デバッグ情報やデバッグ専用機能を含んだアプリを公開してしまう危険性があります。
+AndroidManifest.xmlにdebuggable属性が記述されていると、ビルドの種類にかかわらず常にその値を使用します。リリース時、この設定の変更を忘れると、デバッグ情報やデバッグ専用機能を含んだアプリを公開してしまう危険性があります。
 
 ```
     <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -47,9 +47,9 @@ AndroidManifest.xmlにandroid:debuggable属性が記述されていると、ビ�
     </manifest>
 ```
 
-Lintは上の例のようにAndroidManifest.xmlの中にandroid:debuggable属性の設定を検知すると、次のようなメッセージを出力します。
+Lintは、上の例のようにdebuggable属性の設定を検知すると、次のようなメッセージを出力します。
 
--   Lint結果(Error)  
+-   Lint出力(Error)  
     "Avoid hardcoding the debug mode; leaving it out allows debug and release builds to automatically assign one"
 
 ## 外部リンク

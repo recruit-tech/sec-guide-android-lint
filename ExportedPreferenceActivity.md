@@ -18,7 +18,7 @@ PreferenceActivityサブクラス利用に関して、以下のいずれかの�
 ### PreferenceActivityサブクラスを非公開にする
 
 Android 4.3(API 18)以前の端末では、脆弱性を利用した攻撃が有効になるため、第三者アプリから利用できないようにすべてのPreferenceActivityサブクラスを非公開にしてください。
-API19以降でも、第三者アプリからのActivity起動が必要がない場合は同様に非公開にしてください。
+API19以降でも、第三者アプリからのActivity起動が必要ない場合は同様に非公開にしてください。
 
 ```
     <application
@@ -60,7 +60,7 @@ targetSdkVersionが19以上では、マニフェストでPreferenceActivityサ�
         <uses-sdk android:targetSdkVersion="19"/>
 
         <activity android:name=".MyPreferenceActivity"
-                  android:exported="true"/>  <!-- 外部アプリからIntentによる呼び出しを許可 -->
+                  android:exported="true"/>  <!-- 他アプリからのIntentによる呼び出しを許可 -->
 ```
 
 ```
@@ -82,7 +82,7 @@ public class MyPreferenceActivity extends PreferenceActivity {
 
 Lintは、公開されているPreferenceActivityサブクラスのisValidFragmentメソッドがオーバーライドされていない（コードの正誤は検知しません）ことを検知すると、次のようなメッセージを出力します。
 
--   Lint結果(Warning)  
+-   Lint出力(Warning)  
     "\`PreferenceActivity\` subclass \`com.example.exportedpreferenceactivity.MyPreferenceActivity\` should not be exported"
 
 targetSdkVersionが18以下の場合、isValidFragmentメソッドはオーバーライドの有無にかかわらず常にtrueを返します。

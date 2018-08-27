@@ -27,10 +27,12 @@ JavaScriptを有効にしたWebViewを使う場合は、接続先を信頼でき
     webView.loadUrl("https://trustworthy.example.com");
 ```
 
+リソースのロードを柔軟に制御するshouldOverrideUrlLoadingメソッドを用いたサンプルが[addJavascriptInterface Called (AddJavascriptInterface)][7]にありますので、あわせて参照してください。
+
 注意: Lintは、JavaScriptを有効（`setJavaScriptEnabled(true);`）にしていることだけを検知して警告メッセージを出力しますので、ロードするリソースを如何に制限しようとメッセージは出力され続けます。クロスサイトスクリプティング（XSS）を懸念してのことですが、XSSの対策については[「OWASP クロスサイトスクリプティング対策チートシート」][6]を参照してください。
 
 接続先を完全に信頼できるサイトに限定することが出来ない場合は、Android 5.0(API 21)以降で使えるWebViewのSafe Browsing[^注釈2]設定を有効にすることで、Googleが管理するブラックリストに含まれるサイトへのアクセスを抑制できます。
-詳細は[「What is Safe Browsing?」][4]、アプリでURLの個別検査が必要な場合は[「SafetyNet Safe Browsing API」][5]を参照してください。
+詳細は[「What is Safe Browsing?」][4]、アプリでURLの個別検査が必要な場合は[「SafetyNet Safe Browsing API」][5]も参照してください。
 
 ```
 <manifest>
@@ -51,7 +53,7 @@ Android 7.0(API 24)以降ではNetwork Security Configurationの機能を使う�
 <?xml version="1.0" encoding="utf-8"?>
     ...
     <app ...>
-        // ネットワークセキュリティ設定を res/xml/network_security_config.xml に記述する
+        // ネットワークセキュリティ設定を res/xml/network_security_config.xml に記述することを宣言
         <meta-data android:name="android.security.net.config"
                android:resource="@xml/network_security_config" />
         ...
@@ -63,8 +65,8 @@ Android 7.0(API 24)以降ではNetwork Security Configurationの機能を使う�
 詳しくは[Android DevelopersのAPIガイド][8]を参照してください。
 
 以下に、平文通信を抑制するときの例を示します。
-&lt;domain-config&gt;タグのcleartextTrafficPermitted属性をfalseにすることで実現できます。
-ただし、この設定がWebViewに適用されるのは、Android 8.0(API 26)以降となります。
+domain-configタグのcleartextTrafficPermitted属性をfalseにすることで実現できます。
+ただし、この設定をしてもAndroid 7.0(API 24)ではWebViewからの平文通信は可能で、Android 8.0(API 26)以降で接続方法に依らず設定が有効となります。
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -79,7 +81,7 @@ Android 7.0(API 24)以降ではNetwork Security Configurationの機能を使う�
 ### JavaScriptを無効にする
 
 信頼できないリソースにアクセスする可能性のある場合には、JavaScriptを無効にすることを強く推奨します。
-現在のWebViewのデフォルトは「無効」ですが、`setJavaScriptEnabled(false);`で明示的にJavaScriptを無効にしておくことをお薦めします。
+Android 8.0(API 26)までのWebViewのデフォルトは「無効」ですが、`setJavaScriptEnabled(false);`で明示的にJavaScriptを無効にしておくことを推奨します。
 
 ```java
 import android.app.Activity;
@@ -130,9 +132,9 @@ public class MyActivity extends Activity {
     }
 ```
 
-Lintは `setJavaScriptEnabled(true)` という形のメソッド呼び出しを検知すると、次のようなメッセージを出力します：
+Lintは、 `setJavaScriptEnabled(true)` という形のメソッド呼び出しを検知すると、次のようなメッセージを出力します：
 
--  Lint結果(Warning)  
+-  Lint出力(Warning)  
     “Using setJavaScriptEnabled can introduce XSS vulnerabilities into your application, review carefully.”
 
 ## 外部リンク
@@ -146,8 +148,8 @@ Lintは `setJavaScriptEnabled(true)` という形のメソッド呼び出しを�
 
 
 [1]:https://developer.android.com/reference/android/webkit/WebView.html
-[2]:https://developer.android.com/training/articles/security-tips.html\#WebView
-[3]:http://www.jssec.org/dl/android\_securecoding.pdf
+[2]:https://developer.android.com/training/articles/security-tips.html#WebView
+[3]:http://www.jssec.org/dl/android_securecoding/
 [4]:https://developers.google.com/safe-browsing/
 [5]:https://developer.android.com/training/safetynet/safebrowsing.html
 [6]:https://jpcertcc.github.io/OWASPdocuments/CheatSheets/XSSPrevention.html

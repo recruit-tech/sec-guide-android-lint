@@ -2,7 +2,7 @@
 
 ## 警告されている問題点
 
-デバイス(端末)に基づく識別子を個人情報に関連付けている場合、不正アクセスや、ユーザーのプライバシー侵害につながるリスクがあります。
+デバイス(端末)に基づく識別子を個人情報に関連付けている場合、不正アクセスや、ユーザーのプライバシー侵害のリスクがあります。
 
 ## 対策のポイント
 
@@ -13,7 +13,7 @@
 アプリの目的・用途を考慮し、以下の識別子の利用を検討してください。
 
 |識別子|特徴|
-|:----:|:----:|
+|:----:|:----|
 |広告ID|ユーザーがリセットできる匿名かつ固有の識別子で、広告のユースケースに適している|
 |インスタンスID|アプリがインストールされている間だけ維持されるため、比較的簡単にリセット可能|
 |UUID|グローバルに一意であるため、特定のアプリインスタンスの識別に使用可能|
@@ -21,7 +21,7 @@
 ### 広告IDを利用する
 
 広告とユーザーの分析を目的とする場合は、以下の方法で取得できる広告IDを使用してください。
-ただし、取得前に[インタレストベース広告をオプトアウト]の設定のステータスを確認してください。
+ただし、取得前に「インタレストベース広告をオプトアウト」の設定のステータスを確認してください。
 
 ```java
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
@@ -86,22 +86,23 @@ String uniqueID = UUID.randomUUID().toString();
 
 といった特徴を持つため、以下のようなリスクが考えられます。
 
-- ユーザーが長期間のトラッキングの対象になる  
-- 個々のアプリが扱う情報を「名寄せ」することが可能  
-- 前のデバイス所有者の情報にアクセス出来てしまう
+- 長期間のユーザートラッキング  
+- 個々のアプリが扱う情報の「名寄せ」によるプライバシー侵害  
+- 前のデバイス所有者の情報へのアクセス
 
+名寄せによる個人情報収集においては、個々のアプリが扱う情報では個人を特定できなくても、それらの情報を集めると機微な個人情報が浮き彫りになる可能性があります。
 以上のことから、下表に示すようなデバイスに紐づく識別子を認証のベースとして用いたり、ユーザー情報と一緒に扱うことは推奨されていません。
 
 |識別子|特徴|
-|:----:|:----:|
+|:----:|:----|
 |BluetoothおよびWi-FiのMACアドレス|スキャンする時はパーミッションが必要|
-|ANDROID ID|端末の最初の設定時に生成され、ファクトリーリセットすることで値が再生成|
+|ANDROID ID|端末の最初の設定時に生成され、ファクトリーリセットで値を再生成|
 |Telephony Managerに関する情報|READ_PHONE_STATEパーミッションが必要|
 |シリアル番号|Android2.3以上の非携帯電話端末と一部の携帯電話端末で取得可能|
 
-### MACアドレスのアドレスを使用する
+### MACアドレスを使用する
 
-BluetoothやWi-FiのMACアドレスはデバイスに紐づいており、識別子として用いることは前述のとおり不適切です。
+BluetoothやWi-FiのMACアドレスは完全にデバイスに紐づいており、識別子として用いることは前述のとおり不適切です。
 
 ```java
     BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
@@ -114,13 +115,13 @@ BluetoothやWi-FiのMACアドレスはデバイスに紐づいており、識別
     String wifiAddress =  info.getMacAddress();
 ```
 
-Lintは上のようにBluetoothAdapter.getAddressメソッドおよびWifiInfo.getMacAddressメソッドの呼び出しを検知すると次のようなメッセージを出力します。
+Lintは、上のようにBluetoothAdapter.getAddressメソッドおよびWifiInfo.getMacAddressメソッドの呼び出しを検知すると、次のようなメッセージを出力します。
 
 - Lint出力(Warning)  
   "using 'getAddress' to get identifiers is not recommended."
   "using 'getMacAddress' to get identifiers is not recommended."
 
-注意: Android 6.0(API 23)で常にMACアドレスは、02:00:00:00:00:00を返すようになり、取得は不可能になっています。
+Android 6.0(API 23)でMACアドレスは常に`02:00:00:00:00:00`を返すようになり、真値の取得は不可能になっています。
 
 ### ANDROID IDを使用する
 
@@ -131,12 +132,12 @@ Lintは上のようにBluetoothAdapter.getAddressメソッドおよびWifiInfo.g
     String androidId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
 ```
 
-Lintは上のようにAndroid IDを取得しているのを検出すると次のようなメッセージを出力します。
+Lintは、上のようにAndroid IDを取得しているのを検出すると、次のようなメッセージを出力します。
 
 - Lint出力(Warning)  
   "using 'getString' to get identifiers is not recommended."
 
-### Telephony Managerから取得可能なデバイスに紐づいた識別子を使用する
+### Telephony Managerから取得可能な識別子を使用する
 
 Telephony Managerから以下のようなデバイスに紐づいた値を取得可能ですが、これらを識別子として使用することは前述のとおり不適切です。
 
@@ -152,7 +153,7 @@ Telephony Managerから以下のようなデバイスに紐づいた値を取得
     String subscriberId = telMgr.getSubscriberId();
 ```
 
-Lintは上のようなメソッドの呼び出しを検知すると、それぞれ次のようなメッセージを出力します
+Lintは、上のようなメソッドの呼び出しを検知すると、それぞれ次のようなメッセージを出力します。
 
 - Lint出力(Warning)  
   "using 'getDeviceId' to get identifiers is not recommended."  
@@ -184,13 +185,13 @@ import java.lang.reflect.Method;
     serialNo = android.os.Build.getSerial();
 ```
 
-Lintは上のようなシリアル番号の取得を検知すると、それぞれ次のような警告メッセージを出力します
+Lintは、上のようなシリアル番号の取得を検知すると、それぞれ次のようなメッセージを出力します。
 
 - Lint出力(Warning)  
   "using ‘SERIAL’ to get identifiers is not recommended."    
   "using ‘ro.serial’ to get identifiers is not recommended."
 
-注意: getSerialメソッドは現在のlintは検知しません。
+getSerialメソッドでは、このパターンのメッセージを出力しませんが、不適切なことに変わりありません。
 
 ## 外部リンク
 

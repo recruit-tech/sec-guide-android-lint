@@ -19,7 +19,7 @@
 ```java
 public void setWritePermission(File f) {
     try {
-        // 第一引数（書込み許可）をtrue、第二引数（所有者のみ適用）をfalseにすることで、全ての書き込みを許可する
+        // 第一引数（書込み許可）をtrue、第二引数（所有者のみ適用）をfalseにすることで、すべての書き込みを許可する
         f.setWritable(true, false);
 
         (省略)
@@ -32,7 +32,7 @@ public void setWritePermission(File f) {
 
 Lintは上の例のようにsetWritable(true, false)という形のメソッド呼び出しを検知すると、次のようなメッセージを出力します。
 
--   Lint結果(Warning)  
+-   Lint出力(Warning)  
     "Setting file permission to world-writable can be risky, review carefully."
 
 ## 外部リンク
@@ -49,4 +49,4 @@ Lintは上の例のようにsetWritable(true, false)という形のメソッド�
 [5]:SetWorldReadable.md
 
 
-[^注釈1]: javascript:void(0); "アプリディレクトリ：アプリがインストールされた端末内のストレージ。通常、/data/data/&lt;package-name&gt;を指す。"
+[^注釈1]: javascript:void(0); "アプリディレクトリ：アプリの内部メモリ領域。通常、/data/data/&lt;package-name&gt;を指す。"

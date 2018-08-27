@@ -33,7 +33,7 @@
     }
 ```
 
-Lintは上の例のようにopenFileOutput()、getSharedPreferences()およびgetDir()がWORLD_READABLEを第2引数として呼び出されているのを検知すると、次のようなメッセージを出力します
+Lintは、上の例のようにopenFileOutput()、getSharedPreferences()およびgetDir()がWORLD_READABLEを第2引数として呼び出されていることを検知すると、次のようなメッセージを出力します
 
 - Lint 出力 (警告)  
   "Using 'MODE_WORLD_READABLE' when creating files can be risky, review carefully."

@@ -2,11 +2,11 @@
 
 ## 警告されている問題点
 
-安全とされる暗号方式を指定していないため、情報の漏洩や改竄の被害が発生する可能性があります。
+安全とされる暗号方式を指定していないため、情報漏洩や改竄のリスクがあります。
 
 ## 対策のポイント
 
--   ブロック暗号のモード、およびパディングを推奨されるもので明示的に指定してください
+-   ブロック暗号のモード、およびパディングは、推奨されるものを明示的に指定する
 
 ## 対策の具体例
 
@@ -25,27 +25,27 @@ javax.crypto.CipherクラスのgetInstanceメソッドの引数のモードと�
 ### モード/パディング指定を省略する
 
 getInstanceメソッドのパラメータは、アルゴリズム/モード/パディング、もしくはアルゴリズムのみの指定が可能です。
-アルゴリズムのみを指定した場合、Androidは[欠点のあるECB][3]をモードとして選択することがあり安全ではありません。
+アルゴリズムのみを指定した場合、Androidは[欠点のあるECB][3]をモードとして選択することがあり、安全ではありません。
 
 ```java
     Cipher cipher = Cipher.getInstance("AES");  // アルゴリズムのみ指定
 ```
 
-Lintは上の例のようにgetInstanceに対するアルゴリズムのみの指定を検知すると、次のようなメッセージを出力します。
+Lintは、上の例のようにgetInstanceメソッドにアルゴリズムのみの指定を検知すると、次のようなメッセージを出力します。
 
--   Lint 結果(Warning)  
+-   Lint出力(Warning)  
 "\`Cipher.getInstance` should not be called without setting the encryption mode and padding"
 ただし、API26以降に追加されたAES_128やAES_256を指定した場合には検知しません。
 
 ### ECBモードを指定する
 
-欠点のあるECBをモードとして指定することは安全ではありません。
+[欠点のあるECB][3]をモードとして指定することは安全ではありません。
 
 ```java
     Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");  // モードとしてECBを指定
 ```
 
-Lintは上の例のようにgetInstanceに対するモードにECBの指定を検知すると、次のようなメッセージを出力します。
+Lintは、上の例のようにgetInstanceメソッドにECBのモード指定を検知すると、次のようなメッセージを出力します。
 
 -   Lin結果(Warning)  
     "ECB encryption mode should not be used"

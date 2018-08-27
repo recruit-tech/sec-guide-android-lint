@@ -2,18 +2,18 @@
 
 ## 警告されている問題点
 
-疑似乱数生成器(SecureRandom)のシードに不適切な値を使用しているため、乱数の生成が予測される可能性があります。
+疑似乱数生成器(SecureRandom)のシードに不適切な値を使用しているため、乱数の生成が予測される可能性が高くなります。
 
 ## 対策のポイント
 
-- SecureRandomに不適切なシードを設定しないでください
+- SecureRandomに不適切なシードを設定しない
 
 ## 対策の具体例
 
 ### シードを設定しない
 
 デフォルトで推測困難なシードが設定されるため、特別な理由がない限りSecureRandomにシードを設定する必要はありません。
-コンストラクタでシードを設定せず、setSeedメソッドも使用しないようにしましょう。
+コンストラクタでシードを設定せず、setSeedメソッドも使用しないでください。
 
 ```java
     // 引数のないコンストラクタを使用する
@@ -29,7 +29,7 @@ Note: Android 8.0 (API 26)以降ではシードに依らず乱数を生成する
 
 ## 不適切な例
 
-### SecureRandomのコンストラクタで定数や時刻をシードに設定する
+### SecureRandomのコンストラクタで定数や時刻のシードを設定する
 
 下の例のように、コンストラクタにバイト列を渡してシードを設定すると、予測可能な乱数が生成されることになります。
 
@@ -60,12 +60,6 @@ setSeedメソッドで定数や時刻をシードに設定した場合も、生�
     });
 ```
 
-Lintは上の例のようにシードに定数値の設定を検知すると、次のようなメッセージを出力します。
-
-- Lint 結果(Warning)  
-   " Do not call \`setSeed()\` on a \`SecureRandom\` with a fixed seed: it is not secure. Use \`getSeed()\`."
-    ただし、クラス定数やインスタンス定数をシードに設定した場合には検知できません。
-
 ```java
     Random r = new SecureRandom();
 
@@ -73,21 +67,24 @@ Lintは上の例のようにシードに定数値の設定を検知すると、�
     r.setSeed(System.currentTimeMillis());
 ```
 
-Lintは上の例のようにシードに現在時刻の設定を検知すると、次のようなメッセージを出力します。
+Lintは、前者の例のようにシードに定数値の設定を検知すると、次のようなメッセージを出力します。
 
--   Lint 結果(Warning)  
+- Lint出力(Warning)  
+   " Do not call \`setSeed()\` on a \`SecureRandom\` with a fixed seed: it is not secure. Use \`getSeed()\`."
+    ただし、クラス定数やインスタンス定数をシードに設定した場合には検知できません。
+
+Lintは、後者の例のようにシードに現在時刻の設定を検知すると、次のようなメッセージを出力します。
+
+-   Lint出力(Warning)  
     "It is dangerous to seed \`SecureRandom\` with the current time because that value is more predictable to an attacker than the default seed."
     System.nanoTime()をシードに設定した場合も同様に検知します。
 
 ## 外部リンク
 
 - [SecureRandom | Android Developers][1]  
-   関連するcoding practiceとして、以下のCERTの推奨事項があります。  
-   -- [MSC63-J. Ensure that SecureRandom is properly seeded][2]  
+- [MSC63-J. Ensure that SecureRandom is properly seeded][2]  
 - [RFC 4086: Randomness Requirements for Security][3]  
-  やや発展的なトピックですが、シードとして使えるランダムなノイズを得る方法やその加工方法、その他暗号用途の擬似乱数生成器についてはRFC 4086が参考になります
 - [NIST SP 800-22 Rev. 1a][4]    
-  こちらも発展的なトピックですが、ランダムに生成された値らしさを評価する方法 (統計的仮説検定) については、NISTのSP800-22 Rev. 1aが参考になります。
 
 
 [1]:https://developer.android.com/reference/java/security/SecureRandom.html

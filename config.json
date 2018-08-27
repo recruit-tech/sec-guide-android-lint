@@ -1,7 +1,7 @@
 {
     "useSideMenu": true,
     "lineBreaks": "gfm",
-    "additionalFooterText": "&copy; Recruit Co., Ltd., ",
+    //"additionalFooterText": "&copy; Recruit Co., Ltd., ",
     "title": "Android Lint 利用ガイドライン",
     "anchorCharacter": "¶"
 }

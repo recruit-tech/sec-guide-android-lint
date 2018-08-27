@@ -2,7 +2,7 @@
 
 ## 警告されている問題点
 
-SSL/TLS証明書検証を適切に行っていないため、HTTPS通信などに対する中間者攻撃を受けるリスクがあります。
+SSL/TLS証明書検証を適切に行っていないため、HTTPS通信などに対する中間者攻撃[^1]を受けるリスクがあります。
 
 ## 対策のポイント
 
@@ -10,7 +10,7 @@ SSL/TLS証明書検証を適切に行っていないため、HTTPS通信など�
 
 ## 対策の具体例
 
-特別な証明書検証ロジックが不要であれば、自動でサーバーの証明書検証およびホスト名検証を行ってくれる方法を利用してください。
+特別な証明書検証ロジックが必要ないならば、サーバーの証明書検証およびホスト名検証を行ってくれる既存の方法を利用してください。
 以下は、URLを指定して接続を確立する中で証明書の検証が行われます。
 
 ```java
@@ -27,7 +27,7 @@ SSL/TLS証明書検証を適切に行っていないため、HTTPS通信など�
 デバッグでのみ使用したい接続先を指定したい場合は、Android 7.0(API 24)以降で利用可能なNetwork Security Configurationを使用してください。
 詳しくは[「Network Security Configuration | Android Developers」][2]および[「Androidアプリのセキュア設計・セキュアコーディングガイド」][3]を参照してください。
 
-HTTPSで接続するアプリをデバッグする場合には、マニフェストに記載した設定ファイルに&lt;debug-overrides&gt;タグを使用して、デバッグビルドでのみ使用するCAを指定することが出来ます。
+HTTPSで接続するアプリをデバッグする場合には、マニフェストに記載した設定ファイルにdebug-overridesタグを使用して、デバッグビルドでのみ使用するCAを指定することが出来ます。
 
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -41,12 +41,12 @@ HTTPSで接続するアプリをデバッグする場合には、マニフェス
 </network-security-config>
 ```
 
-注意: デバッグビルドにするためにマニフェストにandroid:debuggable属性を記述しないでください。詳しくは[HardcodedDebugMode](HardcodedDebugMode.md)の項を参照してください。
+注意: デバッグビルドにするためにマニフェストにdebuggable属性を記述しないでください。詳しくは[HardcodedDebugMode](HardcodedDebugMode.md)の項を参照してください。
 
 ## 不適切な例
 
 javax.net.ssl.X509TrustManagerインタフェースを実装するクラスでは、本来checkServerTrustedメソッドおよびcheckClientTrustedメソッドで証明書の検証をします。
-しかし、デバッグなどのために証明書を検証しなくすると、中間者攻撃を受けるリスクになります。
+しかし、デバッグなどのために証明書を検証しない実装にすると、中間者攻撃[^1]を受けるリスクになります。
 
 ```java
     X509TrustManager trustManager = new X509TrustManager() {
@@ -77,13 +77,13 @@ javax.net.ssl.X509TrustManagerインタフェースを実装するクラスで�
     conn.connect();
 ```
 
-LintはcheckServerTrusted()、checkClientTrusted()に有効なコードが存在しないことを検知すると、それぞれ次のような警告メッセージを出力します。
+Lintは、checkServerTrusted()、checkClientTrusted()に有効なコードが存在しないことを検知すると、それぞれ次のような警告メッセージを出力します。
 
--   Lint 結果(Warning)  
+-   Lint出力(Warning)  
     "'checkServerTrusted' is empty, which could cause insecure network traffic due to trusting arbitrary TLS/SSL certificates presented by peers"
     "'checkClientTrusted' is empty, which could cause insecure network traffic due to trusting arbitrary TLS/SSL certificates presented by peers"
 
-このチェックは簡易的なもののため、証明書検証の正当性は判断できません。例えば、ログ出力の一行だとしても「有効なコードはある」ということでメッセージは出力されなくなります。
+このチェックは簡易的なもののため、証明書検証の正当性は判断できません。例えば、ログ出力の一行だとしても「有効なコードは存在する」ということでメッセージは出力されなくなります。
 独自TrustManagerを実装する場合は、証明書検証を適切に行えているかを慎重に確認する必要があります。
 
 ## 外部リンク
@@ -98,3 +98,5 @@ LintはcheckServerTrusted()、checkClientTrusted()に有効なコードが存在
 [2]: https://developer.android.com/training/articles/security-config.html
 [3]: http://www.jssec.org/dl/android_securecoding/5_how_to_use_security_functions.html#%E7%8B%AC%E8%87%AA%E3%81%AEtrustmanager%E3%82%92%E4%BD%9C%E3%82%89%E3%81%AA%E3%81%84-%EF%BC%88%E5%BF%85%E9%A0%88%EF%BC%89
 [4]: https://www.ipa.go.jp/about/press/20140919_1.html
+
+[^1]: dummy "中間者攻撃：通信している2人のユーザーの間に第三者が介在し、送信者と受信者の両方になりすまして、ユーザーが気付かないうちに通信を盗聴したり、制御したりすること"

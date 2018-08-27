@@ -6,12 +6,14 @@
 
 ## 対策のポイント
 
--   コードとアノテーションが競合する潜在的な問題に対処する
+-   コードとアノテーションが不一致な問題に対処する
 
 ## 対策の具体例
 
 Support Annotationsライブラリを使用すると、見落とされやすいnullポインター例外やリソースタイプの不一致などの問題を検出できるようになります。利用方法などの詳細はAndroid Studioの[アノテーションによるコード検査の改善のページ][0]を参照してください。  
 ここでは、Typedefアノテーションの用例を紹介します。Typedefアノテーションは、パラメータ、戻り値、フィールド参照が特定の定数セット、または範囲内の値をとるように宣言するための仕組みです。  
+
+次の例では、openFileメソッドの引数typeには、アノテーションで宣言した定数DOC_WORD, DOC_EXCEL, DOC_PDFのいずれか１つを要求します。
 
 ```java
 @Retention(RetentionPolicy.SOURCE)
@@ -25,9 +27,7 @@ public static final int DOC_PDF   = 2;
 public void openFile(String filename, @DocType int type) { ... }
 ```
 
-上のようにするとopenFileメソッドの引数typeには、アノテーションで宣言した定数DOC_WORD, DOC_EXCEL, DOC_PDFのみが使用できます。
-
-フラグ（|、&、^ など）属性をつけて、使用できる定数を統合することもできます。
+flag属性を有効にして、使用できる定数をフラグ（|、&、^など）で統合することもできます。
 
 ```java
 @Retention(RetentionPolicy.SOURCE)
@@ -48,29 +48,26 @@ setTextStyle(FONT_BOLD|FONT_ITALIC);
 ## 不適切な例
 
 「対策の具体例」で示したopenFileメソッドのtype引数に、アノテーションで宣言していない定数を使用することはコードの信頼性を損ないます。
-アノテーションが競合するので警告を発生しますが、この警告が出てもアプリのコンパイルは可能です。
+アノテーションと一致しないので警告を発生しますが、この警告が出てもアプリのコンパイルは可能です。
 
 ```java
-openFile("sample.doc", 0); // 宣言した定数の値であっても不適切
-
-int type = getDocType(); // typeにもgetDocTypeメソッドの戻り値にもアノテーションがあれば不適切とはならない
-openFile("sample.doc", type);
+openFile("sample.doc", 0); // 宣言した定数の「値」であっても不適切
 ```
 
-Lintは上のようにアノテーションで宣言した定数以外の使用を検知すると、次のようなメッセージを出力します。
+Lintは、上のようにアノテーションで宣言した定数以外の使用を検知すると、次のようなメッセージを出力します。
 
--   Lint結果(Error)  
+-   Lint出力(Error)  
     "Must be one of: （アノテーションで宣言した定数の列挙）"
 
 また、DocTypeの例はflag属性を使用したアノテーション定義ではないため、フラグ（|、&、^ など）で引数のパターンを指定することができません。
 
 ```java
-openFile("sample.doc", DOC_WORD|DOC_PDF);
+openFile("sample.doc", DOC_WORD | DOC_PDF);
 ```
 
-Lintは上のようにflag属性を使用していないアノテーションでフラグの使用を検知すると、次のようなメッセージを出力します。
+Lintは、上のようにflag属性を使用していないアノテーションでのフラグ使用を検知すると、次のようなメッセージを出力します。
 
--   Lint結果(Error)  
+-   Lint出力(Error)  
     "Flag not allowed here"
 
 ## 外部リンク

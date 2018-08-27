@@ -41,16 +41,16 @@ public class BatteryLowReceiver extends BroadcastReceiver {
 }
 ```
 
-注意: アプリがAndroid 8.0を対象にしている場合は、暗黙的Broadcastを受信する静的Receiverを登録できないため、動的Receiverを使用する必要があります。ただし、[暗黙的ブロードキャストの例外(Implicit Broadcast Exceptions)][broadcast_exception]については静的Receiverの登録が可能です。
+注意: アプリがAndroid 8.0を対象にしている場合は、暗黙的Broadcastを受信する静的Receiverを登録できないため、動的Receiverを使用する必要があります。ただし、静的Receiver登録が可能な[例外][broadcast_exception]があります。
 
-Broadcast Receiverを非公開にした場合、intent-filterにシステムだけが送信するBroadcast[^注釈1]以外は設定しないようにしてください。
+非公開BroadcastReceiverに対しては、intent-filterにシステムだけが送信するBroadcast[^注釈1]のみ設定するようにしてください。
 同一アプリ内に指定のIntentを投げたつもりでも、他アプリの公開Receiverが受け取る可能性があるからです。
 
 ```
     <receiver
         android:name=".Receiver"
         android:exported="false">
-        <!-- exported="false"に対しては、システムだけが送信するBroadcastのみとする -->
+        <!-- 非公開BroadcastReceiverに対しては、システムだけが送信するBroadcastのみ設定する -->
         <intent-filter>
             <action android:name="android.intent.action.BATTERY_LOW" />
         </intent-filter>
@@ -112,7 +112,7 @@ public class BatteryLowReceiver extends BroadcastReceiver {
 
 Lintは、後者の静的Receiverのように&lt;intent-filter&gt;でシステム送信のBroadcastを受信する設定とし、かつ、受信したIntentのAction文字列の未確認を検知すると、次のようなメッセージを出力します。
 
-  - Lint結果(Warning)  
+  - Lint出力(Warning)  
     "This broadcast receiver declares an intent-filter for a protected broadcast action string, which can only be sent by the system, not third-party applications. However, the receiver's onReceive method does not appear to call getAction to ensure that the received Intent's action string matches the expected value, potentially making it possible for another actor to send a spoofed intent with no action string or a different action string and cause undesired behavior."
 
 ## 外部リンク
