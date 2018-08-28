@@ -1,4 +1,4 @@
-# Android Lint利用ガイドライン
+# Android Lint 利用ガイドライン
 
 ## Android Lintとは
 
